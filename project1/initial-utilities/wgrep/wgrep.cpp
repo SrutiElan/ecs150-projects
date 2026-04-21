@@ -13,71 +13,88 @@ argv[2] = file
 
 */
 
-int main(int argc, char *argv[]){
+int main(int argc, char *argv[])
+{
 
-    if (argc < 2) { 
+    if (argc < 2)
+    {
         cout << "wgrep: searchterm [file ...]" << endl;
         exit(1);
-    } 
-    else if (argc < 3) { //search term is defined but no file. Read from standard input
-       // read(STDIN_FILENO)
     }
 
     string searchTerm = argv[1];
 
-    if (searchTerm == ""){ // empty string
-        return 0;  //match no lines
+    if (searchTerm == "")
+    {             // empty string
+        return 0; // match no lines
     }
 
     // loop over all files passed in
-    for (int i = 2; i < argc; i++) {
 
-        //open file
-        int fileDescriptor = (argc < 3) ? STDIN_FILENO : open(argv[i], O_RDONLY);
-        if (fileDescriptor < 0) {
-            cout << "wgrep: cannot open file" << endl;            
+    // open file
+    for (int i = 2; i < argc; i++)
+    { // for each file
+        int fileDescriptor = open(argv[i], O_RDONLY);
+
+        if (fileDescriptor < 0)
+        {
+            cout << "wgrep: cannot open file" << endl;
             exit(1);
         }
 
         char buffer;
         int bytesRead;
         string line = "";
-        while ((bytesRead = read(fileDescriptor, &buffer, sizeof(buffer))) > 0) {
-            if (buffer == '\n'){
-                if (line.find(searchTerm) != string::npos){
+        while ((bytesRead = read(fileDescriptor, &buffer, sizeof(buffer))) > 0)
+        {
+            if (buffer == '\n')
+            {
+                if (line.find(searchTerm) != string::npos)
+                {
                     write(STDOUT_FILENO, line.c_str(), line.length());
                     write(STDOUT_FILENO, "\n", 1);
                 }
                 line = "";
-            } else {
+            }
+            else
+            {
                 line += buffer;
             }
         }
         // file not ending in newline
-        if (!line.empty() && line.find(searchTerm) != string::npos){
+        if (!line.empty() && line.find(searchTerm) != string::npos)
+        {
             write(STDOUT_FILENO, line.c_str(), line.length());
             write(STDOUT_FILENO, "\n", 1);
         }
 
         close(fileDescriptor);
     }
-    // stdin case (no file provided)
-    if (argc < 3) {
+
+    // no file provided
+    if (argc < 3)
+    {
         char buffer;
         int bytesRead;
         string line = "";
-        while ((bytesRead = read(STDIN_FILENO, &buffer, sizeof(buffer))) > 0) {
-            if (buffer == '\n'){
-                if (line.find(searchTerm) != string::npos){
+        while ((bytesRead = read(STDIN_FILENO, &buffer, sizeof(buffer))) > 0)
+        {
+            if (buffer == '\n')
+            {
+                if (line.find(searchTerm) != string::npos)
+                {
                     write(STDOUT_FILENO, line.c_str(), line.length());
                     write(STDOUT_FILENO, "\n", 1);
                 }
                 line = "";
-            } else {
+            }
+            else
+            {
                 line += buffer;
             }
         }
-        if (!line.empty() && line.find(searchTerm) != string::npos){
+        if (!line.empty() && line.find(searchTerm) != string::npos)
+        {
             write(STDOUT_FILENO, line.c_str(), line.length());
             write(STDOUT_FILENO, "\n", 1);
         }
