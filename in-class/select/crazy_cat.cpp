@@ -49,7 +49,7 @@ int main(int argc, char *argv[]) {
     wait(NULL); //basically calls wait() x number of children times to wait for all children to finish before printing "all done!" and exiting the program.
   }
   
-  cout << "all done!" << endl;
+  cout << "\ncrazy all done!" << endl;
   
   return 0;
 }
